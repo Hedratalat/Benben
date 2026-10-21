@@ -5,7 +5,7 @@ import { motion, MotionConfig } from "motion/react";
 import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import { ease, Reveal } from "../utils/motion";
-import ProductCard from "./ProductCard";
+import ProductCard from "./Productcard";
 
 export default function ProductsSection({
   title,

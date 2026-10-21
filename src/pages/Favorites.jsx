@@ -6,7 +6,7 @@ import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { Heart } from "lucide-react";
 import { db } from "../../firebase";
 import { ease, fadeUp } from "../utils/motion";
-import ProductCard from "../store/ProductCard";
+import ProductCard from "../store/Productcard";
 import { useStore } from "../store/Storecontext";
 
 const ring =

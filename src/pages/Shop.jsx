@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import { db } from "../../firebase";
 import { ease, fadeUp } from "../utils/motion";
-import ProductCard from "../store/ProductCard";
 import { getCardPrice } from "../store/Storecontext";
+import ProductCard from "../store/Productcard";
 
 const PER_PAGE = 12;
 
