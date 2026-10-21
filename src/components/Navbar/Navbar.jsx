@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useStore } from "../../store/Storecontext";
-import useAuth from "../../store/useAuth";
+import useAuth from "../../store/Useauth";
 
 /* ---------- Icons (inline SVG, no extra packages needed) ---------- */
 const Svg = ({ children }) => (
