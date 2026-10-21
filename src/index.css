@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-page text-heading font-body antialiased; /* خلفية الصفحات + لون النص + الخط الأساسي */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading text-heading; /* كل العناوين Cinzel تلقائيًا */
+  }
+
+  * {
+    @apply border-border; /* الحد الافتراضي لأي border */
+  }
+}
