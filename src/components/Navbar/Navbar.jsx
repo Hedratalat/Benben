@@ -244,7 +244,7 @@ export default function Navbar() {
             <img
               src={logo}
               alt="BENBEN"
-              className="h-20 w-auto max-w-none sm:h-24 lg:h-24"
+              className="h-20 w-auto max-w-none sm:h-24 "
             />
           </Link>
 

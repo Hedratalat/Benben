@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../../../public/logoo.png";
 
 /* ---------- Data (عدّل الروابط والبيانات حسب موقعك) ---------- */
 const explore = [

@@ -136,9 +136,10 @@ function FilterSection({ title, children }) {
   );
 }
 
-/* ---------- All filters (used by the sidebar and the mobile drawer) ---------- */
+/* All filters (used by the sidebar and the mobile drawer)*/
 function FiltersPanel({
   idPrefix,
+  showCategory = true,
   search,
   setSearch,
   category,
@@ -172,7 +173,7 @@ function FiltersPanel({
         </div>
       </FilterSection>
 
-      {categories.length > 0 && (
+      {showCategory && categories.length > 0 && (
         <FilterSection title="Category">
           <div
             role="radiogroup"
@@ -359,6 +360,10 @@ export default function Shop() {
     minPrice !== "" || maxPrice !== "",
   ].filter(Boolean).length;
   const hasFilters = activeCount > 0;
+  const drawerActiveCount = [
+    search.trim() !== "",
+    minPrice !== "" || maxPrice !== "",
+  ].filter(Boolean).length;
 
   function clearFilters() {
     setSearch("");
@@ -449,33 +454,47 @@ export default function Shop() {
                     }`}
               </p>
 
-              {/* Toolbar (mobile only: opens the filters drawer) */}
-              <div className="mb-5 flex items-center gap-3 lg:hidden">
+              {/* Toolbar (mobile only): Filters button + all category chips, wrapping */}
+              <div className="mb-5 flex flex-wrap items-center gap-2 lg:hidden">
                 <button
                   type="button"
                   onClick={() => setDrawerOpen(true)}
-                  className="flex h-10 items-center gap-2 rounded-full border border-border-strong bg-surface px-4 font-body text-sm font-medium text-heading transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-page"
+                  className="flex h-10 shrink-0 items-center gap-2 rounded-full border border-border-strong bg-surface px-4 font-body text-sm font-medium text-heading transition-colors hover:bg-surface-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-page"
                 >
                   <SlidersHorizontal size={16} />
                   Filters
-                  {activeCount > 0 && (
+                  {drawerActiveCount > 0 && (
                     <span className="grid h-5 min-w-5 place-items-center rounded-full bg-gold-cta px-1 text-[11px] font-bold text-heading">
-                      {activeCount}
+                      {drawerActiveCount}
                     </span>
                   )}
                 </button>
-                {hasFilters && (
-                  <button
-                    type="button"
-                    onClick={clearFilters}
-                    className="flex items-center gap-1 rounded font-body text-sm font-medium text-heading underline-offset-4 transition hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 focus-visible:ring-offset-page"
+
+                {categories.length > 0 && (
+                  <div
+                    role="radiogroup"
+                    aria-label="Filter by category"
+                    className="contents"
                   >
-                    <X size={14} />
-                    Clear filters
-                  </button>
+                    {[{ key: "all", label: "All" }, ...categories].map((c) => (
+                      <button
+                        key={c.key}
+                        type="button"
+                        role="radio"
+                        aria-checked={category === c.key}
+                        onClick={() => setCategory(c.key)}
+                        className={`h-10 rounded-full border px-4 font-body text-sm transition-colors ${
+                          category === c.key
+                            ? "border-surface-dark bg-surface-dark text-surface"
+                            : "border-border-strong/60 text-heading hover:border-gold"
+                        } ${ring}`}
+                      >
+                        {c.label}
+                      </button>
+                    ))}
+                  </div>
                 )}
               </div>
-
               {loading ? (
                 <div className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
                   {Array.from({ length: 6 }, (_, i) => (
@@ -646,7 +665,11 @@ export default function Shop() {
               </div>
 
               <div className="flex-1 overflow-y-auto px-5 py-5">
-                <FiltersPanel idPrefix="drawer" {...panelProps} />
+                <FiltersPanel
+                  idPrefix="drawer"
+                  showCategory={false}
+                  {...panelProps}
+                />
               </div>
 
               <div className="border-t border-border p-4">
