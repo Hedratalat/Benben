@@ -2,6 +2,7 @@ import { Suspense, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import PageLoader from "../PageLoader/PageLoader";
+import Footer from "../Footer/Footer";
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -17,6 +18,7 @@ export default function Layout() {
       <Suspense fallback={<PageLoader />}>
         <Outlet />
       </Suspense>
+      {!isDashboard && <Footer />}
     </>
   );
 }

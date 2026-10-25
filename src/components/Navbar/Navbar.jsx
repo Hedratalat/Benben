@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useStore } from "../../store/Storecontext";
 import useAuth from "../../store/Useauth";
-
+import logo from "../../../public/logoo.png";
 /* ---------- Icons (inline SVG, no extra packages needed) ---------- */
 const Svg = ({ children }) => (
   <svg
@@ -227,7 +227,7 @@ export default function Navbar() {
           </div>
 
           {/* CENTER: brand */}
-          <Link
+          {/* <Link
             to="/"
             aria-label="BENBEN home"
             className={`group flex items-center gap-2 rounded-full px-2 font-heading text-base font-bold tracking-[0.18em] text-heading sm:gap-3 sm:text-xl lg:text-2xl ${ring}`}
@@ -235,6 +235,17 @@ export default function Navbar() {
             <span>BEN</span>
             <Diamond className="h-2 w-2 transition-transform duration-500 group-hover:rotate-[225deg] group-hover:scale-150 motion-reduce:transition-none sm:h-2.5 sm:w-2.5" />
             <span>BEN</span>
+          </Link> */}
+          <Link
+            to="/"
+            aria-label="BENBEN home"
+            className={`flex h-9 items-center rounded-full px-2 sm:h-11 ${ring}`}
+          >
+            <img
+              src={logo}
+              alt="BENBEN"
+              className="h-20 w-auto max-w-none sm:h-24 lg:h-24"
+            />
           </Link>
 
           {/* RIGHT: icons */}
