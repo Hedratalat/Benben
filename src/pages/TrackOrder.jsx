@@ -592,7 +592,7 @@ export default function TrackOrder() {
                   type="text"
                   autoComplete="off"
                   spellCheck={false}
-                  placeholder="Type your order number here to search"
+                  placeholder="Enter order number"
                   value={input}
                   onChange={(e) => {
                     setInput(e.target.value);
