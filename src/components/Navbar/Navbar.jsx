@@ -43,7 +43,7 @@ const BagIcon = () => (
 const links = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
-  { label: "Collections", href: "/collections" },
+  { label: "Track Order", href: "/track-order" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];

@@ -5,7 +5,7 @@ import logo from "../../../public/logoo.png";
 const explore = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },
-  { label: "Collections", href: "/collections" },
+  { label: "Track Order", href: "/track-order" },
   { label: "About", href: "/about" },
 ];
 

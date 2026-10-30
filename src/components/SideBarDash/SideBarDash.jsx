@@ -5,7 +5,7 @@ export default function SideBarDash({ isOpen, setIsOpen }) {
   const navItems = [
     { to: "heroDashboard", label: "Hero Dashboard" },
     { to: "productsManagement", label: "Manage Products" },
-    { to: "ordersDah", label: "Orders" },
+    { to: "orders", label: "Orders" },
     { to: "feedback", label: "Feedback" },
     { to: "message", label: "Message" },
   ];
