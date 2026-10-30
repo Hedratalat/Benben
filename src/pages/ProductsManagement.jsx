@@ -31,6 +31,7 @@ import {
 
 const COLLECTION_NAME = "Products";
 const PROMO_COLLECTION_NAME = "PromoCodes";
+const CATEGORY_COLLECTION_NAME = "Categories";
 const PRODUCTS_PER_PAGE = 8;
 
 const EMPTY_FORM = {
@@ -63,6 +64,10 @@ export default function ProductsManagement() {
   const [promoDiscount, setPromoDiscount] = useState("");
   const [promoType, setPromoType] = useState("general");
   const [promoLoading, setPromoLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const [categoryName, setCategoryName] = useState("");
+  const [categoryImage, setCategoryImage] = useState("");
+  const [categoryLoading, setCategoryLoading] = useState(true);
 
   function showToast(message) {
     setToast({ message, key: Date.now() });
@@ -104,6 +109,25 @@ export default function ProductsManagement() {
       (err) => {
         console.error("Error loading promo codes:", err.code, err.message);
         setPromoLoading(false);
+      },
+    );
+    return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    const q = query(
+      collection(db, CATEGORY_COLLECTION_NAME),
+      orderBy("createdAt", "desc"),
+    );
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        setCategories(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
+        setCategoryLoading(false);
+      },
+      (err) => {
+        console.error("Error loading categories:", err.code, err.message);
+        setCategoryLoading(false);
       },
     );
     return () => unsub();
@@ -328,6 +352,36 @@ export default function ProductsManagement() {
     }
   }
 
+  async function handleAddCategory(e) {
+    e.preventDefault();
+    const name = categoryName.trim();
+    const image = categoryImage.trim();
+    if (!name || !image) return;
+
+    try {
+      // اسم الكاتيجوري هو الـ id، فمش هيتكرر
+      await setDoc(doc(db, CATEGORY_COLLECTION_NAME, name), {
+        name,
+        image,
+        createdAt: serverTimestamp(),
+      });
+      showToast("Category saved");
+      setCategoryName("");
+      setCategoryImage("");
+    } catch (err) {
+      console.error("Error adding category:", err);
+    }
+  }
+
+  async function deleteCategory(id) {
+    try {
+      await deleteDoc(doc(db, CATEGORY_COLLECTION_NAME, id));
+      showToast("Category deleted");
+    } catch (err) {
+      console.error("Error deleting category:", err);
+    }
+  }
+
   return (
     <div className="mx-auto max-w-7xl font-body" dir="ltr">
       {/* Toast */}
@@ -376,14 +430,26 @@ export default function ProductsManagement() {
 
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium text-heading">Category</label>
-          <input
+          <select
             name="category"
             value={form.category}
             onChange={handleChange}
             required
-            placeholder="e.g. Electronics"
             className={`h-11 ${inputCls}`}
-          />
+          >
+            <option value="">Select a category</option>
+            {categories.map((c) => (
+              <option key={c.id} value={c.name}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+          {categories.length === 0 && (
+            <p className="text-xs text-muted">
+              No categories yet. Add one in the "Categories" section below
+              first.
+            </p>
+          )}
         </div>
 
         <div className="flex flex-col gap-1.5">
@@ -652,6 +718,93 @@ export default function ProductsManagement() {
           )}
         </div>
       </form>
+
+      {/* ===== Categories ===== */}
+      <div className="mb-10 mt-10">
+        <h2 className="mb-4 font-heading text-2xl font-bold text-heading">
+          Categories
+        </h2>
+
+        <form
+          onSubmit={handleAddCategory}
+          className="mb-6 flex flex-col gap-4 rounded-2xl border border-border bg-surface p-5 shadow-luxury sm:flex-row sm:items-end sm:p-6"
+        >
+          <div className="flex flex-1 flex-col gap-1.5">
+            <label className="text-sm font-medium text-heading">
+              Category name
+            </label>
+            <input
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+              required
+              placeholder="e.g. Electronics"
+              className={`h-11 ${inputCls}`}
+            />
+          </div>
+          <div className="flex flex-1 flex-col gap-1.5">
+            <label className="text-sm font-medium text-heading">
+              Image URL
+            </label>
+            <input
+              value={categoryImage}
+              onChange={(e) => setCategoryImage(e.target.value)}
+              required
+              placeholder="https://..."
+              className={`h-11 ${inputCls}`}
+            />
+          </div>
+          <button
+            type="submit"
+            className="h-11 whitespace-nowrap rounded-full bg-gold-cta px-6 text-sm font-semibold text-heading transition hover:opacity-90"
+          >
+            Save category
+          </button>
+        </form>
+
+        {categoryLoading ? (
+          <p className="text-sm text-muted">Loading...</p>
+        ) : categories.length === 0 ? (
+          <p className="text-sm text-muted">
+            No categories yet. Create your first one above.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            {categories.map((cat) => (
+              <div
+                key={cat.id}
+                className="flex items-center gap-3 rounded-xl border border-border bg-surface p-3"
+              >
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  className="h-14 w-14 shrink-0 rounded-lg bg-surface-muted object-cover"
+                />
+                <p className="min-w-0 flex-1 truncate text-sm font-bold text-heading">
+                  {cat.name}
+                </p>
+                <button
+                  onClick={() => {
+                    setCategoryName(cat.name);
+                    setCategoryImage(cat.image);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  aria-label="Edit category"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-surface-muted text-heading transition hover:bg-gold-hover"
+                >
+                  <Pencil size={16} />
+                </button>
+                <button
+                  onClick={() => deleteCategory(cat.id)}
+                  aria-label="Delete category"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-error/10 text-error transition hover:bg-error/20"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
 
       {/* ===== Promo codes ===== */}
       <div className="mb-10 mt-10">

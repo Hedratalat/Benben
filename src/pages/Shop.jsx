@@ -15,7 +15,7 @@ import { db } from "../../firebase";
 import { ease, fadeUp } from "../utils/motion";
 import { getCardPrice } from "../store/Storecontext";
 import ProductCard from "../store/Productcard";
-
+import { useSearchParams } from "react-router-dom";
 const PER_PAGE = 12;
 
 const ring =
@@ -266,12 +266,27 @@ export default function Shop() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [page, setPage] = useState(1);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const resultsRef = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // الكاتيجوري بتيجي من الرابط (?category=...)
+  const category = norm(searchParams.get("category")) || "all";
+
+  function setCategory(key) {
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        if (key === "all") next.delete("category");
+        else next.set("category", key);
+        return next;
+      },
+      { replace: true },
+    );
+  }
 
   // Same live query used by ProductsSection
   useEffect(() => {
