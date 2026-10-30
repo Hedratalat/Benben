@@ -27,7 +27,7 @@ export default function SocialRail() {
   return (
     <aside
       aria-label="Social media"
-      className="fixed left-3 top-1/2 z-30 hidden -translate-y-1/2 xl:block"
+      className="absolute left-3 top-1/2 z-10 hidden -translate-y-1/2 xl:block"
     >
       <ul className="flex flex-col gap-1 rounded-full border border-border-strong bg-surface/85 p-1.5 shadow-luxury backdrop-blur-md">
         {socials.map(({ label, href, Icon }) => (

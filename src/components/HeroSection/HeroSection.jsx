@@ -12,7 +12,7 @@ import {
 import { ChevronLeft, ChevronRight, ShoppingBag } from "lucide-react";
 import { db } from "../../../firebase";
 import { useStore } from "../../store/Storecontext";
-
+import SocialRail from "../SocialRail/SocialRail";
 const COLLECTION = "HeroSlides";
 const DURATION = 3500;
 
@@ -343,6 +343,7 @@ export default function HeroSection() {
               </div>
             )}
           </div>
+          <SocialRail />
 
           {/* لودينج بسيط أول ما الصفحة تفتح */}
           {loading && (
