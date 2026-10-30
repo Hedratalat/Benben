@@ -3,6 +3,7 @@ import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../Navbar/Navbar";
 import PageLoader from "../PageLoader/PageLoader";
 import Footer from "../Footer/Footer";
+import SocialRail from "../SocialRail/SocialRail";
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -14,7 +15,12 @@ export default function Layout() {
 
   return (
     <>
-      {!isDashboard && <Navbar />}
+      {!isDashboard && (
+        <>
+          <Navbar />
+          <SocialRail />
+        </>
+      )}
       <Suspense fallback={<PageLoader />}>
         <Outlet />
       </Suspense>

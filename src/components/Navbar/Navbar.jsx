@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useStore } from "../../store/Storecontext";
 import useAuth from "../../store/Useauth";
 import logo from "../../../public/logoo.png";
+import { socials } from "../SocialRail/SocialRail";
 /* ---------- Icons (inline SVG, no extra packages needed) ---------- */
 const Svg = ({ children }) => (
   <svg
@@ -316,6 +317,21 @@ export default function Navbar() {
         </ul>
 
         <div className="flex flex-wrap gap-3">
+          <div className="mt-6 flex items-center gap-3">
+            {socials.map(({ label, href, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                tabIndex={open ? 0 : -1}
+                className="grid h-11 w-11 place-items-center rounded-full border border-border-dark text-surface transition-colors hover:bg-gold hover:text-surface-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
+              >
+                <Icon size={18} />
+              </a>
+            ))}
+          </div>
           {actions.map(({ to, label, Icon, countKey }) => {
             const count = countKey ? counts[countKey] : undefined;
             return (
